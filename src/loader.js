@@ -5,106 +5,146 @@ const arrayFrom = require('array-from');
 const Immutable = require('immutable');
 
 function getData() {
-    const root = document.querySelector('[data-interactive-marriage-equality-root]');
+  const root = document.querySelector('[data-interactive-marriage-equality-root]');
 
-    function parseCSV(text) {
-        let data = {};
-        text.split('\n').slice(1).forEach(row => {
-            row = row.split(',');
-            if (row.length === 2) {
-                const name = row[0].replace(/\"/g, '');
-                data[name.toUpperCase()] = {
-                    name: name,
-                    value: parseFloat(row[1])
-                };
-            }
-        });
-        return Immutable.fromJS(data);
-    }
+  function parseCSV(text) {
+    let data = {};
+    text
+      .split('\n')
+      .slice(1)
+      .forEach(row => {
+        row = row.split(',');
+        if (row.length === 2) {
+          const name = row[0].replace(/\"/g, '');
+          data[name.toUpperCase()] = {
+            name: name,
+            value: parseFloat(row[1])
+          };
+        }
+      });
+    return Immutable.fromJS(data);
+  }
 
-    return fetch(root.getAttribute('data-data-url'), {
-        credentials: 'same-origin'
-    })
-        .then(r => r.text())
-        .then(text => parseCSV(text))
-        .catch(error => {
-            console.error(error);
-            return parseCSV(require('./data/fallback-data.csv.js'));
-        });
+  return fetch(root.getAttribute('data-data-url'), {
+    credentials: 'same-origin'
+  })
+    .then(r => r.text())
+    .then(text => parseCSV(text))
+    .catch(error => {
+      console.error(error);
+      return parseCSV(require('./data/fallback-data.csv.js'));
+    });
 }
 
 // Load any scrollyteller content from Odyssey
 let scrollytellers;
 function getScrollytellers() {
-    if (!scrollytellers) {
-        scrollytellers = window.__ODYSSEY__.utils.anchors.getSections('scrollyteller').map(section => {
-            section.mountNode = document.createElement('div');
-            section.mountNode.className = 'u-full';
-            section.startNode.parentNode.insertBefore(section.mountNode, section.startNode);
+  if (!scrollytellers) {
+    scrollytellers = window.__ODYSSEY__.utils.anchors.getSections('scrollyteller').map(section => {
+      section.mountNode = document.createElement('div');
+      section.mountNode.className = 'u-full';
+      section.startNode.parentNode.insertBefore(section.mountNode, section.startNode);
 
-            section.markers = initMarkers(section, 'mark');
+      section.markers = initMarkers(section, 'mark');
 
-            return section;
-        });
-    }
-    return scrollytellers;
+      return section;
+    });
+  }
+  return scrollytellers;
 }
 
 let charts;
 function getCharts() {
-    if (!charts) {
-        charts = arrayFrom(document.querySelectorAll('[name="chart"]')).map(node => {
-            node.mountNode = document.createElement('div');
-            node.parentNode.insertBefore(node.mountNode, node);
+  if (!charts) {
+    charts = arrayFrom(document.querySelectorAll('[name="chart"]')).map(node => {
+      node.mountNode = document.createElement('div');
+      node.parentNode.insertBefore(node.mountNode, node);
 
-            return node;
-        });
-    }
-    return charts;
+      return node;
+    });
+  }
+  return charts;
 }
 
 // Create markers from actual markers and anything that follows them within the section
 function initMarkers(section, name) {
-    let markers = [];
+  let markers = [];
+  let nextConfig = {};
+  let nextNodes = [];
 
-    let config = {};
+  let idx = 0;
 
-    section.betweenNodes.forEach(node => {
-        if (node.tagName === 'A' && node.getAttribute('name') && node.getAttribute('name').indexOf(name) === 0) {
-            config = alternatingCaseToObject(node.getAttribute('name').replace(new RegExp(`^${name}`), ''));
-        }
+  // Commit the current nodes to a marker
+  function pushMarker() {
+    if (nextNodes.length === 0) return;
 
-        if (node.tagName === 'P') {
-            markers.push({ config, node });
-        }
+    markers.push({
+      idx: idx++,
+      config: nextConfig,
+      nodes: nextNodes,
+      section
     });
+    nextNodes = [];
+  }
 
-    return markers;
+  // Check the section nodes for markers and marker content
+  section.betweenNodes.forEach((node, index) => {
+    if (node.tagName === 'A' && node.getAttribute('name') && node.getAttribute('name').indexOf(name) === 0) {
+      // Found a new marker so we should commit the last one
+      pushMarker();
+
+      // If marker has no config then just use the previous config
+      let configString = node.getAttribute('name').replace(new RegExp(`^${name}`), '');
+      if (configString) {
+        nextConfig = alternatingCaseToObject(configString);
+        nextConfig.hash = configString;
+      } else {
+        // Empty marks should stop the piecemeal flow
+        nextConfig.piecemeal = false;
+      }
+    } else if (!node.mountable) {
+      // Any other nodes just get grouped for the next marker
+      nextNodes.push(node);
+      node.parentNode.removeChild(node);
+    }
+
+    // Any trailing nodes just get added as a last marker
+    if (index === section.betweenNodes.length - 1) {
+      pushMarker();
+    }
+
+    // If piecemeal is on/true then each node has its own box
+    if (nextConfig.piecemeal) {
+      pushMarker();
+    }
+  });
+
+  return markers;
 }
 
 function alternatingCaseToObject(string) {
-    const config = string.match(/[A-Z]+[0-9a-z]+/g);
+  const config = string.match(/[A-Z]+[0-9a-z]+/g);
 
-    if (!config) return {};
+  if (!config) return {};
 
-    let o = {};
+  let o = {};
 
-    config.forEach(match => {
-        let [, key, value] = match.match(/([A-Z]+)([0-9a-z]+)/);
-        key = key.toLowerCase();
+  config.forEach(match => {
+    let [, key, value] = match.match(/([A-Z]+)([0-9a-z]+)/);
+    key = key.toLowerCase();
 
-        if (o[key]) {
-            // Key exists so treat it as a list
-            if (!(o[key] instanceof Array)) {
-                o[key] = [o[key]];
-            }
-            o[key].push(value);
-        } else {
-            o[key] = value;
-        }
-    });
+    if (o[key]) {
+      // Key exists so treat it as a list
+      if (!(o[key] instanceof Array)) {
+        o[key] = [o[key]];
+      }
+      o[key].push(value);
+    } else {
+      o[key] = value;
+    }
+  });
 
-    return o;
+  return o;
 }
 
 module.exports = { getData, getScrollytellers, getCharts };

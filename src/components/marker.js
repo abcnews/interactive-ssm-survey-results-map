@@ -3,37 +3,44 @@ const { Component, h } = require('preact');
 const styles = require('./marker.scss');
 
 class Marker extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.ref = this.ref.bind(this);
-    }
+    this.ref = this.ref.bind(this);
+  }
 
-    shouldComponentUpdate() {
-        return false;
-    }
+  shouldComponentUpdate() {
+    return false;
+  }
 
-    componentWillUnmount() {
-        this.element.removeChild(this.props.marker.node);
-    }
+  componentWillUnmount() {
+    if (!this.element) return;
+    if (!this.props.marker.nodes) return;
 
-    render() {
-        const { reference, className } = this.props;
+    this.props.marker.nodes.forEach(node => {
+      this.element.removeChild(node);
+    });
+  }
 
-        return (
-            <div ref={reference} className={`${styles.wrapper} ${className || ''}`}>
-                <div className={`u-richtext-invert ${styles.detail}`} ref={this.ref} />
-            </div>
-        );
-    }
+  render() {
+    const { reference, className } = this.props;
 
-    ref(element) {
-        if (!element) return;
-        if (!this.props.marker.node) return;
+    return (
+      <div ref={reference} className={`${styles.wrapper} ${className || ''}`}>
+        <div className={`u-richtext-invert ${styles.detail}`} ref={this.ref} />
+      </div>
+    );
+  }
 
-        this.element = element;
-        this.element.appendChild(this.props.marker.node);
-    }
+  ref(element) {
+    if (!element) return;
+    if (!this.props.marker.nodes) return;
+
+    this.element = element;
+    this.props.marker.nodes.forEach(node => {
+      this.element.appendChild(node);
+    });
+  }
 }
 
 module.exports = Marker;
