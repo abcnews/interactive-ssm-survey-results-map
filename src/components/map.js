@@ -1,16 +1,16 @@
-const { Component, h } = require('preact');
-const values = require('object-values');
-const d3 = require('d3-selection');
-const force = require('d3-force');
-const transition = require('d3-transition');
-const TopoJSON = require('topojson');
-const ranger = require('power-ranger');
-const Geo = require('d3-geo');
-const scale = require('../data/colour-scale');
+const { Component, h } = require("preact");
+const values = require("object-values");
+const d3 = require("d3-selection");
+const force = require("d3-force");
+const transition = require("d3-transition");
+const TopoJSON = require("topojson");
+const ranger = require("power-ranger");
+const Geo = require("d3-geo");
+const scale = require("../data/colour-scale");
 
-const mapJSON = require('../data/map.quantized.json');
+const mapJSON = require("../data/map.quantized.json");
 
-const styles = require('./map.scss');
+const styles = require("./map.scss").default;
 
 let svg;
 let features;
@@ -65,7 +65,7 @@ class Map extends Component {
   }
 
   render() {
-    return <div ref={el => (this.wrapper = el)} />;
+    return <div ref={(el) => (this.wrapper = el)} />;
   }
 
   onResize(viewport) {
@@ -80,17 +80,20 @@ class Map extends Component {
 
       path = Geo.geoPath().projection(projection);
 
-      data.forEach(f => {
-        f.properties.support = this.props.data.getIn([f.properties.elect_div.toUpperCase(), 'value']);
+      data.forEach((f) => {
+        f.properties.support = this.props.data.getIn([
+          f.properties.elect_div.toUpperCase(),
+          "value",
+        ]);
         f.properties.name = f.properties.elect_div;
 
         f.x = path.centroid(f)[0];
         f.y = path.centroid(f)[1];
       });
 
-      svg.attr('width', width).attr('height', height);
+      svg.attr("width", width).attr("height", height);
 
-      features.selectAll('path').attr('d', path);
+      features.selectAll("path").attr("d", path);
 
       this.zoomTo(this.props.marker);
     }
@@ -99,8 +102,11 @@ class Map extends Component {
   findElectorate(name) {
     if (!name) return false;
 
-    return data.find(datum => {
-      return datum.properties.name.toLowerCase().replace(/[^a-z]/, '') === name.toLowerCase().replace(/[^a-z]/, '');
+    return data.find((datum) => {
+      return (
+        datum.properties.name.toLowerCase().replace(/[^a-z]/, "") ===
+        name.toLowerCase().replace(/[^a-z]/, "")
+      );
     });
   }
 
@@ -120,8 +126,11 @@ class Map extends Component {
     path = Geo.geoPath().projection(projection);
 
     // Graft the support onto the map data
-    data = TopoJSON.feature(mapJSON, mapJSON.objects.map).features.map(f => {
-      f.properties.support = this.props.data.getIn([f.properties.elect_div.toUpperCase(), 'value']);
+    data = TopoJSON.feature(mapJSON, mapJSON.objects.map).features.map((f) => {
+      f.properties.support = this.props.data.getIn([
+        f.properties.elect_div.toUpperCase(),
+        "value",
+      ]);
       f.properties.name = f.properties.elect_div;
 
       f.x = path.centroid(f)[0];
@@ -132,22 +141,22 @@ class Map extends Component {
 
     svg = d3
       .select(this.wrapper)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height);
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
-    features = svg.append('g').attr('class', styles.features);
+    features = svg.append("g").attr("class", styles.features);
 
     let colours = scale();
 
     features
-      .selectAll('path')
+      .selectAll("path")
       .data(data)
       .enter()
-      .append('path')
-      .attr('d', path)
-      .style('fill', d => colours(d.properties.support))
-      .on('click', d => {
+      .append("path")
+      .attr("d", path)
+      .style("fill", (d) => colours(d.properties.support))
+      .on("click", (d) => {
         this.zoomTo({ config: { electorate: d.properties.name } }, true);
       });
 
@@ -161,7 +170,7 @@ class Map extends Component {
       this.createLabel(),
       this.createLabel(),
       this.createLabel(),
-      this.createLabel()
+      this.createLabel(),
     ];
     locationLabel = this.createLabel();
 
@@ -170,34 +179,34 @@ class Map extends Component {
   }
 
   createLabel() {
-    const label = features.append('g');
+    const label = features.append("g");
 
     let balloonWidth = 280;
     let locationLabelBalloon = label
-      .append('g')
-      .attr('fill', 'black')
-      .style('pointer-events', 'none')
-      .attr('transform', `translate(-${balloonWidth / 2}, -69)`);
+      .append("g")
+      .attr("fill", "black")
+      .style("pointer-events", "none")
+      .attr("transform", `translate(-${balloonWidth / 2}, -69)`);
     locationLabelBalloon
-      .append('polygon')
-      .attr('points', '0,0 10,20, 20,0')
-      .attr('transform', `translate(${balloonWidth / 2 - 10}, 49)`);
+      .append("polygon")
+      .attr("points", "0,0 10,20, 20,0")
+      .attr("transform", `translate(${balloonWidth / 2 - 10}, 49)`);
     locationLabelBalloon
-      .append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('rx', 3)
-      .attr('ry', 3)
-      .attr('width', balloonWidth)
-      .attr('height', 50);
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("rx", 3)
+      .attr("ry", 3)
+      .attr("width", balloonWidth)
+      .attr("height", 50);
     locationLabelBalloon
-      .append('text')
-      .attr('font-size', 22)
-      .attr('fill', 'white')
-      .style('text-anchor', 'middle')
-      .attr('x', balloonWidth / 2)
-      .attr('y', 33)
-      .text('');
+      .append("text")
+      .attr("font-size", 22)
+      .attr("fill", "white")
+      .style("text-anchor", "middle")
+      .attr("x", balloonWidth / 2)
+      .attr("y", 33)
+      .text("");
     return label;
   }
 
@@ -212,25 +221,25 @@ class Map extends Component {
 
     let bounds;
     switch (d.properties.name.toLowerCase()) {
-      case 'bowman':
+      case "bowman":
         bounds = path.bounds(d);
         x = bounds[0][0] + (bounds[1][0] - bounds[0][0]) * 0.2;
         break;
-      case 'bonner':
+      case "bonner":
         bounds = path.bounds(d);
         x = bounds[0][0] + (bounds[1][0] - bounds[0][0]) * 0.2;
         y = bounds[0][1] + (bounds[1][1] - bounds[0][1]) * 0.8;
         break;
-      case 'mayo':
+      case "mayo":
         bounds = path.bounds(d);
         x = bounds[0][0] + (bounds[1][0] - bounds[0][0]) * 0.8;
         y = bounds[0][1] + (bounds[1][1] - bounds[0][1]) * 0.5;
         break;
-      case 'parkes':
+      case "parkes":
         bounds = path.bounds(d);
         x = bounds[0][0] + (bounds[1][0] - bounds[0][0]) * 0.7;
         break;
-      case 'fenner':
+      case "fenner":
         bounds = path.bounds(d);
         x = bounds[0][0] + (bounds[1][0] - bounds[0][0]) * 0.1;
         break;
@@ -238,13 +247,22 @@ class Map extends Component {
       // nothing
     }
 
-    label.attr('transform', `translate(${x}, ${y}) scale(${1 / k})`).style('opacity', 1);
+    label
+      .attr("transform", `translate(${x}, ${y}) scale(${1 / k})`)
+      .style("opacity", 1);
 
-    var text = label.select('text');
+    var text = label.select("text");
 
-    const updatedText = d.properties.name + ' (' + (Math.round(d.properties.support * 100) + '%)');
+    const updatedText =
+      d.properties.name +
+      " (" +
+      (Math.round(d.properties.support * 100) + "%)");
     if (updatedText !== text.text()) {
-      text.text(d.properties.name + ' (' + (Math.round(d.properties.support * 100) + '%)'));
+      text.text(
+        d.properties.name +
+          " (" +
+          (Math.round(d.properties.support * 100) + "%)")
+      );
     }
   }
 
@@ -264,7 +282,7 @@ class Map extends Component {
       let renderOthers = true;
 
       // Find any other electorates
-      otherLabels.forEach(l => l.style('opacity', 0));
+      otherLabels.forEach((l) => l.style("opacity", 0));
       if (marker && marker.config.and) {
         others = [].concat(marker.config.and).map(this.findElectorate);
 
@@ -272,16 +290,19 @@ class Map extends Component {
         if (width < 400) {
           const name = marker.config.electorate.toLowerCase();
           // Sydney and Chiffley -> hide chiffley
-          if (name === 'sydney' && others[0].properties.name.toLowerCase() === 'chifley') {
+          if (
+            name === "sydney" &&
+            others[0].properties.name.toLowerCase() === "chifley"
+          ) {
             renderOthers = false;
-          } else if (name === 'griffith') {
+          } else if (name === "griffith") {
             renderMain = false;
             renderOthers = false;
-          } else if (name == 'maranoa') {
+          } else if (name == "maranoa") {
             renderOthers = false;
           }
         } else if (width < 1000) {
-          if (name === 'griffith') {
+          if (name === "griffith") {
             renderMain = false;
             renderOthers = false;
           }
@@ -297,7 +318,7 @@ class Map extends Component {
         let maxX = 0;
         let minY = 999999;
         let maxY = 0;
-        [d].concat(others).forEach(data => {
+        [d].concat(others).forEach((data) => {
           minX = Math.min(minX, data.x);
           maxX = Math.max(maxX, data.x);
           minY = Math.min(minY, data.y);
@@ -314,7 +335,9 @@ class Map extends Component {
         // Detect zoom level for whole of electorate
         var centroid = path.centroid(d);
         var b = path.bounds(d);
-        k = 0.8 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+        k =
+          0.8 /
+          Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
         k = Math.min(50, k);
       } else {
         k = 50; // Ok-ish zoom to a normal electorate level (based on Brisbane)
@@ -330,9 +353,9 @@ class Map extends Component {
 
       // Hide the main maker if need be
       if ((marker && marker.config.hide) || renderMain === false) {
-        locationLabel.style('opacity', 0);
+        locationLabel.style("opacity", 0);
       } else {
-        locationLabel.style('opacity', 1);
+        locationLabel.style("opacity", 1);
       }
 
       let names = [];
@@ -344,7 +367,7 @@ class Map extends Component {
       }
 
       // Bring the current electorates to the front
-      features.selectAll('path').sort((a, b) => {
+      features.selectAll("path").sort((a, b) => {
         // main electorate
         if (a.properties.name !== d.properties.name) return -1;
         // other electorates
@@ -364,8 +387,8 @@ class Map extends Component {
         k = 0.8 * 1.55;
       }
 
-      locationLabel.style('opacity', 0);
-      otherLabels.forEach(l => l.style('opacity', 0));
+      locationLabel.style("opacity", 0);
+      otherLabels.forEach((l) => l.style("opacity", 0));
 
       electorate = null;
     }
@@ -374,10 +397,7 @@ class Map extends Component {
     if (k === mapZoom && this.state.electorate === electorate) return;
 
     // Highlight the new feature
-    features
-      .selectAll('path')
-      .transition()
-      .duration(1400);
+    features.selectAll("path").transition().duration(1400);
 
     // if the diff of the x and y are both huge then zoom out first
     const diffX = Math.abs(x - mapX);
@@ -400,15 +420,30 @@ class Map extends Component {
       features
         .transition()
         .duration(800)
-        .attr('transform', `translate(${width / 2}, ${height / 2}) scale(${middleZoom}) translate(${-x}, ${-y})`)
+        .attr(
+          "transform",
+          `translate(${width / 2}, ${
+            height / 2
+          }) scale(${middleZoom}) translate(${-x}, ${-y})`
+        )
         .transition()
         .duration(600)
-        .attr('transform', `translate(${width / 2}, ${height / 2}) scale(${k}) translate(${-x}, ${-y})`);
+        .attr(
+          "transform",
+          `translate(${width / 2}, ${
+            height / 2
+          }) scale(${k}) translate(${-x}, ${-y})`
+        );
     } else {
       features
         .transition()
         .duration(1000)
-        .attr('transform', `translate(${width / 2}, ${height / 2}) scale(${k}) translate(${-x}, ${-y})`);
+        .attr(
+          "transform",
+          `translate(${width / 2}, ${
+            height / 2
+          }) scale(${k}) translate(${-x}, ${-y})`
+        );
     }
 
     mapX = x;

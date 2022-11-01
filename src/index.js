@@ -5,7 +5,6 @@ const init = async () => {
   const data = await getData();
 
   getScrollytellers().forEach((section) => {
-    console.log(section);
     mount(section.mountNode, data, section);
   });
 

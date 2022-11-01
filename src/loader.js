@@ -58,15 +58,10 @@ function getScrollytellers() {
     mount.parentNode.replaceChild(anchorEl, mount);
   });
 
-  // const x = window.__ODYSSEY__.utils.mounts
-  // .getSections("scrollyteller")
-  // console.log (x)
-
   if (!scrollytellers) {
     scrollytellers = window.__ODYSSEY__.utils.mounts
       .getSections("scrollyteller")
       .map((section) => {
-        console.log(section)
         section.mountNode = document.createElement("div");
         section.mountNode.className = "u-full";
         section.startNode.parentNode.insertBefore(

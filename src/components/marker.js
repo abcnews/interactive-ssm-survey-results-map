@@ -1,6 +1,6 @@
-const { Component, h } = require('preact');
+const { Component, h } = require("preact");
 
-const styles = require('./marker.scss');
+const styles = require("./marker.scss").default;
 
 class Marker extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class Marker extends Component {
     if (!this.element) return;
     if (!this.props.marker.nodes) return;
 
-    this.props.marker.nodes.forEach(node => {
+    this.props.marker.nodes.forEach((node) => {
       this.element.removeChild(node);
     });
   }
@@ -26,7 +26,7 @@ class Marker extends Component {
     const { reference, className } = this.props;
 
     return (
-      <div ref={reference} className={`${styles.wrapper} ${className || ''}`}>
+      <div ref={reference} className={`${styles.wrapper} ${className || ""}`}>
         <div className={`u-richtext-invert ${styles.detail}`} ref={this.ref} />
       </div>
     );
@@ -37,7 +37,7 @@ class Marker extends Component {
     if (!this.props.marker.nodes) return;
 
     this.element = element;
-    this.props.marker.nodes.forEach(node => {
+    this.props.marker.nodes.forEach((node) => {
       this.element.appendChild(node);
     });
   }

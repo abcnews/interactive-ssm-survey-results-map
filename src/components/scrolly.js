@@ -4,7 +4,7 @@ const { initMarkers } = require('../loader');
 const Marker = require('./marker');
 const Background = require('./background');
 
-const styles = require('./scrolly.scss');
+const styles = require('./scrolly.scss').default;
 
 class Scrolly extends Component {
     constructor(props) {
