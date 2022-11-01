@@ -1,4 +1,4 @@
-# scrolly-story
+# Same Sex Marriage Survey Map
 
 A project generated from [aunty](https://github.com/abcnews/aunty)'s `basic-story` template.
 
@@ -44,3 +44,4 @@ Just Work™.
 ## Authors
 
 - Nathan Hoad ([nathan@nathanhoad.net](mailto:nathan@nathanhoad.net))
+- [Joshua Byrd](https://github.com/phocks)
