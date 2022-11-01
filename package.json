@@ -1,21 +1,24 @@
 {
-  "name": "interactive-ssm-results-map",
+  "name": "interactive-ssm-survey-results-map",
   "version": "1.1.2",
   "description": "A map of results from the SSM",
   "license": "MIT",
   "private": true,
   "contributors": [
-    "Nathan Hoad <nathan@nathanhoad.net>"
+    "Nathan Hoad <nathan@nathanhoad.net>",
+    "Joshua Byrd <phocks@gmail.com>"
   ],
   "aunty": "preact-app",
   "scripts": {
     "start": "aunty serve"
   },
   "devDependencies": {
-    "@abcnews/aunty": "^5.1.3",
-    "prettier": "^1.5.3"
+    "babel-preset-preact": "^2.0.0",
+    "prettier": "^2.7.1"
   },
   "dependencies": {
+    "@abcnews/aunty": "^13.0.3",
+    "@abcnews/mount-utils": "^2.0.0",
     "array-from": "^2.1.1",
     "csv-loader": "^2.1.1",
     "d3-force": "^1.0.6",
