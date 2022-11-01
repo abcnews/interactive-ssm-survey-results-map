@@ -4,8 +4,6 @@ require("isomorphic-fetch");
 const arrayFrom = require("array-from");
 const Immutable = require("immutable");
 
-import { isMount, getMountValue, selectMounts } from "@abcnews/mount-utils";
-
 function parseCSV(text) {
   let data = {};
   text
@@ -28,6 +26,7 @@ function getData() {
   return parseCSV(require("./data/fallback-data.csv.js"));
 
   // NOTE: FROM NOW ON JUST USE THE "FALLBACK" DATA
+  // AS RESULTS WILL NOW NOT CHANGE
 
   // const root = document.querySelector(
   //   "[data-interactive-marriage-equality-root]"
@@ -51,17 +50,6 @@ function getData() {
 // Load any scrollyteller content from Odyssey
 let scrollytellers;
 function getScrollytellers() {
-  const mounts = selectMounts();
-
-  mounts.forEach((mount) => {
-    const anchorEl = document.createElement("a");
-    anchorEl.name = mount.id;
-    anchorEl.innerHTML = " ";
-
-    // replace el with newEL
-    mount.parentNode.replaceChild(anchorEl, mount);
-  });
-
   if (!scrollytellers) {
     scrollytellers = window.__ODYSSEY__.utils.mounts
       .getSections("scrollyteller")

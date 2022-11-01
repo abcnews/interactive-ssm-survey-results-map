@@ -1,7 +1,29 @@
 const { h, render } = require("preact");
 const { getData, getScrollytellers, getCharts } = require("./loader");
 
+import { selectMounts } from "@abcnews/mount-utils";
+
+/**
+ * Transforms PL mount points back into Phase 1 style anchor tags.
+ * Useful for porting old stories to support rendering in PL.
+ * eg. <div id="hashname"></div> ----> <a name="hashname"> </a>
+ */
+function backtransformMounts() {
+  const mounts = selectMounts();
+
+  mounts.forEach((mount) => {
+    const anchorEl = document.createElement("a");
+    anchorEl.name = mount.id;
+    anchorEl.innerHTML = " ";
+
+    // replace el with newEL
+    mount.parentNode.replaceChild(anchorEl, mount);
+  });
+}
+
 const init = async () => {
+  backtransformMounts();
+
   const data = await getData();
 
   getScrollytellers().forEach((section) => {
