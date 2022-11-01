@@ -1,0 +1,12 @@
+{
+	"id": "pl-upgrade",
+	"targets": [
+		{
+			"files": "**",
+			"from": "/Users/byrdj5d/Sites/interactive-ssm-results-map/.aunty/build",
+			"profile": "contentftp",
+			"publicPath": "https://www.abc.net.au/res/sites/news-projects/interactive-ssm-survey-results-map/pl-upgrade/",
+			"to": "/www/res/sites/news-projects/interactive-ssm-survey-results-map/pl-upgrade"
+		}
+	]
+}

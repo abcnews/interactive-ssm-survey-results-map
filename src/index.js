@@ -25,9 +25,9 @@ if (module.hot) {
       mountFunction(element, data, section);
     } catch (e) {
       // Render the error to the screen in place of the actual app
-      // const ErrorBox = require("./error-box");
-      // render(<ErrorBox error={e} />, element, element.lastChild);
       console.error(e);
+      const ErrorBox = require("./error-box");
+      render(<ErrorBox error={e} />, element, element.lastChild);
     }
   };
 

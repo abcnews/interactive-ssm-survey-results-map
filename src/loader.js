@@ -6,42 +6,46 @@ const Immutable = require("immutable");
 
 import { isMount, getMountValue, selectMounts } from "@abcnews/mount-utils";
 
-function getData() {
-  const root = document.querySelector(
-    "[data-interactive-marriage-equality-root]"
-  );
-
-  function parseCSV(text) {
-    let data = {};
-    text
-      .split("\n")
-      .slice(1)
-      .forEach((row) => {
-        row = row.split(",");
-        if (row.length === 2) {
-          const name = row[0].replace(/\"/g, "");
-          data[name.toUpperCase()] = {
-            name: name,
-            value: parseFloat(row[1]),
-          };
-        }
-      });
-    return Immutable.fromJS(data);
-  }
-
-  return fetch(
-    root?.getAttribute("data-data-url") ||
-      "/cm/code/9153062/ssm-results-electorate-csv.js",
-    {
-      credentials: "same-origin",
-    }
-  )
-    .then((r) => r.text())
-    .then((text) => parseCSV(text))
-    .catch((error) => {
-      console.error(error);
-      return parseCSV(require("./data/fallback-data.csv.js"));
+function parseCSV(text) {
+  let data = {};
+  text
+    .split("\n")
+    .slice(1)
+    .forEach((row) => {
+      row = row.split(",");
+      if (row.length === 2) {
+        const name = row[0].replace(/\"/g, "");
+        data[name.toUpperCase()] = {
+          name: name,
+          value: parseFloat(row[1]),
+        };
+      }
     });
+  return Immutable.fromJS(data);
+}
+
+function getData() {
+  return parseCSV(require("./data/fallback-data.csv.js"));
+
+  // NOTE: FROM NOW ON JUST USE THE "FALLBACK" DATA
+
+  // const root = document.querySelector(
+  //   "[data-interactive-marriage-equality-root]"
+  // );
+
+  // return fetch(
+  //   root?.getAttribute("data-data-url") ||
+  //     "/cm/code/9153062/ssm-results-electorate-csv.js",
+  //   {
+  //     credentials: "same-origin",
+  //   }
+  // )
+  //   .then((r) => r.text())
+  //   .then((text) => parseCSV(text))
+  //   .catch((error) => {
+  //     console.error(error);
+  //     return parseCSV(require("./data/fallback-data.csv.js"));
+  //   });
 }
 
 // Load any scrollyteller content from Odyssey
