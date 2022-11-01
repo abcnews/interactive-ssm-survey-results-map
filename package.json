@@ -1,39 +1,39 @@
 {
-  "name": "interactive-ssm-survey-results-map",
-  "version": "1.1.2",
-  "description": "A map of results from the SSM",
-  "license": "MIT",
-  "private": true,
-  "contributors": [
-    "Nathan Hoad <nathan@nathanhoad.net>",
-    "Joshua Byrd <phocks@gmail.com>"
-  ],
-  "aunty": "preact-app",
-  "scripts": {
-    "start": "aunty serve"
-  },
-  "devDependencies": {
-    "babel-preset-preact": "^2.0.0",
-    "prettier": "^2.7.1"
-  },
-  "dependencies": {
-    "@abcnews/aunty": "^13.0.3",
-    "@abcnews/mount-utils": "^2.0.0",
-    "array-from": "^2.1.1",
-    "csv-loader": "^2.1.1",
-    "d3-force": "^1.0.6",
-    "d3-geo": "^1.6.4",
-    "d3-scale": "^1.0.6",
-    "d3-selection": "^1.1.0",
-    "d3-transition": "^1.1.0",
-    "es6-promise": "^4.1.1",
-    "immutable": "^3.8.1",
-    "isomorphic-fetch": "^2.2.1",
-    "object-values": "^1.0.0",
-    "power-ranger": "^1.1.0",
-    "preact": "^8.2.5",
-    "preact-compat": "^3.17.0",
-    "smoothscroll": "^0.3.0",
-    "topojson": "^3.0.0"
-  }
+	"name": "interactive-ssm-survey-results-map",
+	"version": "2.0.0",
+	"description": "A map of results from the SSM",
+	"license": "MIT",
+	"private": true,
+	"contributors": [
+		"Nathan Hoad <nathan@nathanhoad.net>",
+		"Joshua Byrd <phocks@gmail.com>"
+	],
+	"aunty": "preact-app",
+	"scripts": {
+		"start": "aunty serve"
+	},
+	"devDependencies": {
+		"babel-preset-preact": "^2.0.0",
+		"prettier": "^2.7.1"
+	},
+	"dependencies": {
+		"@abcnews/aunty": "^13.0.3",
+		"@abcnews/mount-utils": "^2.0.0",
+		"array-from": "^2.1.1",
+		"csv-loader": "^2.1.1",
+		"d3-force": "^1.0.6",
+		"d3-geo": "^1.6.4",
+		"d3-scale": "^1.0.6",
+		"d3-selection": "^1.1.0",
+		"d3-transition": "^1.1.0",
+		"es6-promise": "^4.1.1",
+		"immutable": "^3.8.1",
+		"isomorphic-fetch": "^2.2.1",
+		"object-values": "^1.0.0",
+		"power-ranger": "^1.1.0",
+		"preact": "^8.2.5",
+		"preact-compat": "^3.17.0",
+		"smoothscroll": "^0.3.0",
+		"topojson": "^3.0.0"
+	}
 }
