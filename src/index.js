@@ -16,7 +16,7 @@ function backtransformMounts() {
     anchorEl.name = mount.id;
     anchorEl.innerHTML = " ";
 
-    // replace el with newEL
+    // replace element
     mount.parentNode.replaceChild(anchorEl, mount);
   });
 }
