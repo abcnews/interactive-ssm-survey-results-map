@@ -1,6 +1,6 @@
 {
 	"name": "interactive-ssm-survey-results-map",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "A map of results from the SSM",
 	"license": "MIT",
 	"private": true,
