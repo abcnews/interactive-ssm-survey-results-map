@@ -2,6 +2,12 @@
   width: 100vw;
   height: 100vh;
   background: #2e3638;
+
+  path {
+    stroke-width: 0.02;
+    stroke: #333;
+    fill: #999;
+  }
 }
 
 .before {
